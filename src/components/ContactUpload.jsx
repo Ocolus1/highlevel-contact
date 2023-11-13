@@ -31,7 +31,7 @@ function ContactUpload({ setCurrentStep }) {
             formData.append('business_email', businessEmail);
     
             try {
-                const response = await axios.post('http://localhost:8000/api/contact/upload_and_process/', formData);
+                const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/contact/upload_and_process/`, formData);
                 if (response.data.message) {
                     alert(response.data.message);
                     setTimeout(() => {

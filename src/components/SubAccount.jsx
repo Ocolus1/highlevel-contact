@@ -44,7 +44,7 @@ function SubAccount({ setCurrentStep }) {
         };
 
         // Make the POST request to the backend
-        fetch("http://localhost:8000/api/subaccounts/create_subaccount/", {
+        fetch(`${import.meta.env.VITE_REST_ENDPOINT}/api/subaccounts/create_subaccount/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

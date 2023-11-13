@@ -15,7 +15,7 @@ function PhoneNumberPurchase({ setCurrentStep }) {
         setLoading(true);
         
         try {
-            const response = await axios.post('http://localhost:8000/api/phonenumber/purchase_phone_number/', data);
+            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/phonenumber/purchase_phone_number/`, data);
             if (response.data.message) {
                 setSuccess(response.data.message)
                 setPurchaseSuccess(true);

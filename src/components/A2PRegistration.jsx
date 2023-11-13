@@ -16,7 +16,7 @@ function A2PRegistration({ setCurrentStep }) {
         console.log(data)
 
         try {
-            const response = await axios.post('http://localhost:8000/api/a2p/A2PRegistration/', data);
+            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/a2p/A2PRegistration/`, data);
             console.log(response)
             if (response.data.message) {
                 setSuccess(response.data.message)
