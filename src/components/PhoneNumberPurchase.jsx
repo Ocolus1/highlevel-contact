@@ -63,17 +63,6 @@ function PhoneNumberPurchase({ setCurrentStep }) {
                     )}
                 </div>
 
-                {/* Navigation Buttons */}
-                <div className="mt-4">
-                    {<Button variant="secondary" onClick={() => setCurrentStep(prev => prev - 1)}>Previous</Button>}
-                    {<Button className="ml-2" onClick={() => {
-                        if (purchaseSuccess == true) {
-                            setCurrentStep(prev => prev + 1)
-                        }
-                    }}>
-                        Next
-                    </Button>}
-                </div>
             </Row>
         </Container>
     );

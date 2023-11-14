@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, ProgressBar, Button } from 'react-bootstrap';
 import SubAccount from '../components/SubAccount';
 import PhoneNumberPurchase from '../components/PhoneNumberPurchase';
@@ -6,9 +6,20 @@ import A2PRegistration from '../components/A2PRegistration';
 import ContactUpload from '../components/ContactUpload';
 import ScheduleCalendar from '../components/ScheduleCalendar';
 import Navigation from '../components/Navigation';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from "react-router-dom";
 
 function MultiStepForm() {
     const [currentStep, setCurrentStep] = useState(1);
+    const { isLoggedIn } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/");
+        }
+        // The cleanup function is optional in this case since navigate is stable
+    }, [isLoggedIn, navigate]); 
 
     const steps = [
         { label: "Onboarding", component: <SubAccount setCurrentStep={setCurrentStep} /> },

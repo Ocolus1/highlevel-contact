@@ -35,7 +35,7 @@ const CustomButton = styled(Button)({
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const { login, logout, isLoggedIn } = useAuth();
+    const { login, logout, isLoggedIn, user } = useAuth();
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -120,7 +120,7 @@ function ResponsiveAppBar() {
                             <MenuItem  onClick={handleCloseNavMenu}>
                                 {isLoggedIn ? (
                                     <div>
-                                        <CustomButton onClick={logout}>Logout</CustomButton>
+                                        <CustomButton onClick={handleLogout}>Logout</CustomButton>
                                     </div>
                                 ) : (
                                         <GoogleLogin
@@ -141,8 +141,6 @@ function ResponsiveAppBar() {
                     <Typography
                         variant="h5"
                         noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -150,8 +148,11 @@ function ResponsiveAppBar() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: 'white',
                             textDecoration: 'none',
+                            '&hover': {
+                                color: "white"
+                            }
                         }}
                     >
                         FUA-Automation
@@ -159,8 +160,8 @@ function ResponsiveAppBar() {
                     <Box sx={{  display: { xs: 'none', md: 'flex' } }} marginLeft="auto">
                         {isLoggedIn ? (
                             <div>
-                                <span>User is logged in</span>
-                                <CustomButton onClick={logout}>Logout</CustomButton>
+                                <span>{user?.first_name} {user?.last_name} is logged in</span>
+                                <CustomButton onClick={handleLogout}>Logout</CustomButton>
                             </div>
                         ) : (
                                 <GoogleLogin

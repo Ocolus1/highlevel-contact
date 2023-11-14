@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import HomeHero from '../components/home/HomeHero';
 import { useAuth } from '../context/AuthContext';
@@ -8,11 +8,13 @@ function Home() {
     const { isLoggedIn } = useAuth();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate("/onboarding");
+        }
+        // The cleanup function is optional in this case since navigate is stable
+    }, [isLoggedIn, navigate]); 
 
-    if (isLoggedIn){
-        navigate("/onboarding");
-    }
-    
     return (
         <>
             <Navigation />
