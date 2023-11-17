@@ -4,23 +4,27 @@ import { useForm } from 'react-hook-form';
 import axios from "axios";
 
 
-function PhoneNumberPurchase({ setCurrentStep }) {
+function PhoneNumberPurchase({ authToken, getUser }) {
     const [loading, setLoading] = useState(false);
     const [purchaseSuccess, setPurchaseSuccess] = useState(null);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
-    const { register, handleSubmit } = useForm();
+    const { handleSubmit } = useForm();
 
-    const handlePurchase = async (data) => {
+    const handlePurchase = async () => {
         setLoading(true);
         
         try {
-            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/phonenumber/purchase_phone_number/`, data);
+            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/phonenumber/purchase_phone_number/`,
+                {
+                    Authorization: `Token ${authToken}`,
+                    "Content-Type": "application/json",
+                });
             if (response.data.message) {
                 setSuccess(response.data.message)
                 setPurchaseSuccess(true);
-                setTimeout(() => {
-                    setCurrentStep(prev => prev + 1);
+                setTimeout(async () => {
+                    await getUser();
                 }, 2000);
             }
             if (response.data.error) {
@@ -45,8 +49,6 @@ function PhoneNumberPurchase({ setCurrentStep }) {
                     ) : purchaseSuccess === false ? (
                         <>
                             <Form.Group className="mb-4">
-                                <Form.Label>Business Email</Form.Label>
-                                <Form.Control type="email" {...register("businessEmail")} />
                                 <Alert variant="danger">{error || "Error purchasing phone number."}</Alert>
                                 <Button onClick={handleSubmit(handlePurchase)}>Purchase Phone Number</Button>
                             </Form.Group>
@@ -54,8 +56,6 @@ function PhoneNumberPurchase({ setCurrentStep }) {
                     ) : (
                         <>
                             <Form.Group className="mb-4">
-                                <Form.Label>Business Email</Form.Label>
-                                <Form.Control type="email" {...register("businessEmail")} />
                                 <p className='my-2'>Click the button below to purchase a phone number.</p>
                                 <Button onClick={handleSubmit(handlePurchase)}>Purchase Phone Number</Button>
                             </Form.Group>

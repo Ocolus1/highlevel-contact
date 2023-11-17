@@ -29,9 +29,31 @@ export const AuthProvider = ({ children }) => {
                 logout();
             }
         };
-
+        console.log(user)
         getUser();
     }, [authToken]);
+
+
+    const getUser = async () => {
+        if (authToken) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_REST_ENDPOINT}/auth/user/`, {
+                    headers: {
+                        Authorization: `Token ${authToken}`,
+                    },
+                });
+
+                setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                // Handle token expiration or invalid token
+                logout();
+            }
+        } else {
+            // Handle token expiration or invalid token
+            logout();
+        }
+    };
 
     const login = (fua_token) => {
         setAuthToken(fua_token);
@@ -59,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ authToken, login, logout, isLoggedIn, user }}>
+        <AuthContext.Provider value={{ authToken, login, logout, isLoggedIn, user, getUser }}>
             {children}
         </AuthContext.Provider>
     );
