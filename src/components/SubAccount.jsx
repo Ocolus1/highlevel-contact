@@ -3,13 +3,16 @@ import { useForm } from 'react-hook-form';
 import { timezones, countries, countryCodes } from "../constants/countries.js"
 import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 
-function SubAccount({ setCurrentStep }) {
+
+
+function SubAccount({ authToken, getUser }) {
     const [showSuccessAlert, setShowSuccessAlert] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [showFailureAlert, setShowFailureAlert] = React.useState(false);
     const [showSupport, setShowSupportAlert] = React.useState(false);
     const [failureCount, setFailureCount] = React.useState(0);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
 
     const onSubmit = (data) => {
         setLoading(true)
@@ -47,18 +50,18 @@ function SubAccount({ setCurrentStep }) {
         fetch(`${import.meta.env.VITE_REST_ENDPOINT}/api/subaccounts/create_subaccount/`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                Authorization: `Token ${authToken}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(payload)
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.message == "Subaccount created successfully") {
                     setShowSuccessAlert(true);
-                    setTimeout(() => {
+                    setTimeout(async () => {
                         setShowSuccessAlert(false);
-                        setCurrentStep(prev => prev + 1);
+                        await getUser();
                     }, 2000);
                 } else {
                     setFailureCount(prev => prev + 1);
@@ -83,10 +86,10 @@ function SubAccount({ setCurrentStep }) {
     const hasEIN = watch("hasEIN");
     return (
         <div>
-            <Row className="justify-content-md-center mt-5">
+            <Row className="justify-content-md-center mt-5 mb-5">
                 <Col xs={12} md={8}>
                     <Container className="mt-5">
-                        <h2 className="mb-3">Client Onboarding</h2>
+                        <h2 className="mb-3">Client Business Details</h2>
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Form.Group className="mb-4">
                                 <Form.Label>Cost per booked appointment</Form.Label>
@@ -94,7 +97,7 @@ function SubAccount({ setCurrentStep }) {
                             </Form.Group>
                             <Form.Group className="mb-4">
                                 <Form.Label>Industry</Form.Label>
-                                <Form.Control type="text" defaultValue="roofing"  {...register("industry")} />
+                                <Form.Control type="text" defaultValue="roofing"  {...register("industry")} readOnly />
                             </Form.Group>
                             <Form.Group className="mb-4">
                                 <Form.Label>Legal Business Name</Form.Label>
@@ -113,7 +116,7 @@ function SubAccount({ setCurrentStep }) {
                             </Form.Group>
                             <Form.Group className="mb-4">
                                 <Form.Label>Business Regions of Operation</Form.Label>
-                                <Form.Select multiple {...register("businessRegionOfOperation", { required: true })}>
+                                <Form.Select  {...register("businessRegionOfOperation", { required: true })}>
                                     <option value="Africa">Africa</option>
                                     <option value="Asia / Pacific">Asia / Pacific</option>
                                     <option value="Europe">Europe</option>
@@ -225,7 +228,7 @@ function SubAccount({ setCurrentStep }) {
                                     label={<span>I accept the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a></span>}
                                 />
                             </Form.Group>
-                            <Button type="submit" variant="primary">{loading ? "loading..." : "Next"}</Button>
+                            <Button type="submit" disabled={loading} variant="primary">{loading ? "loading..." : "Next"}</Button>
                         </Form>
                     </Container>
                 </Col>
