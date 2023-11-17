@@ -1,22 +1,18 @@
 import React, { useState } from "react";
 import axios from 'axios';
-import { Button, Container, Row, Alert, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import CSVDataTable from "./CSVDataTable";
 
 
-function ContactUpload({ setCurrentStep }) {
+function ContactUpload({ authToken, getUser }) {
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [businessEmail, setBusinessEmail] = useState("");
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
         setIsProcessed(false); // Reset the process state
     };
 
-    const onEmailChange = (e) => {
-        setBusinessEmail(e.target.value);
-    };
 
 
     const handleProcess = async (event) => {
@@ -28,14 +24,20 @@ function ContactUpload({ setCurrentStep }) {
 
             const formData = new FormData();
             formData.append('csv_file', file);
-            formData.append('business_email', businessEmail);
     
             try {
-                const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/contact/upload_and_process/`, formData);
+                const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/contact/upload_and_process/`, 
+                formData,
+                    {
+                        headers: {
+                            Authorization: `Token ${authToken}`
+                        }
+                    }
+                );
                 if (response.data.message) {
                     alert(response.data.message);
-                    setTimeout(() => {
-                        setCurrentStep(prev => prev + 1);
+                    setTimeout(async () => {
+                        await getUser();
                     }, 2000);
                 }
             } catch (error) {
@@ -56,8 +58,6 @@ function ContactUpload({ setCurrentStep }) {
                     <label>Note: Only csv files are accepted.</label> <br/>
                     <h6 className="my-2">Acceptable sample.</h6> 
                     <CSVDataTable />
-                    <Form.Label className="mt-2">Business Email</Form.Label>
-                    <Form.Control type="email" placeholder="Business Email" onChange={onEmailChange} />
                     <label htmlFor="contactFile" className="form-label mt-3">
                         Choose a CSV file
                     </label>

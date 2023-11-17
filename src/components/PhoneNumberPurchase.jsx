@@ -7,8 +7,8 @@ import axios from "axios";
 function PhoneNumberPurchase({ authToken, getUser }) {
     const [loading, setLoading] = useState(false);
     const [purchaseSuccess, setPurchaseSuccess] = useState(null);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
     const { handleSubmit } = useForm();
 
     const handlePurchase = async () => {
@@ -16,10 +16,14 @@ function PhoneNumberPurchase({ authToken, getUser }) {
         
         try {
             const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/phonenumber/purchase_phone_number/`,
+                {},
                 {
-                    Authorization: `Token ${authToken}`,
-                    "Content-Type": "application/json",
-                });
+                    headers: {
+                        Authorization: `Token ${authToken}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
             if (response.data.message) {
                 setSuccess(response.data.message)
                 setPurchaseSuccess(true);

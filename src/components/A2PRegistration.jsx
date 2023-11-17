@@ -4,25 +4,33 @@ import { useForm } from 'react-hook-form';
 import axios from "axios";
 
 
-function A2PRegistration({ setCurrentStep }) {
+function A2PRegistration({ authToken, getUser }) {
     const [loading, setLoading] = useState(false);
     const [a2pRegSuccess, setA2pRegSuccess] = useState(null);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState(false);
-    const { register, handleSubmit} = useForm();
+    const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
+    const { handleSubmit} = useForm();
 
-    const handleRegistration = async (data) => {
+    const handleRegistration = async () => {
         setLoading(true);
         console.log(data)
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/a2p/A2PRegistration/`, data);
+            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/a2p/A2PRegistration/`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Token ${authToken}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
             console.log(response)
             if (response.data.message) {
                 setSuccess(response.data.message)
                 setA2pRegSuccess(true);
-                setTimeout(() => {
-                    setCurrentStep(prev => prev + 1);
+                setTimeout(async () => {
+                    await getUser();
                 }, 2000);
             }
             if (response.data.error) {
@@ -51,8 +59,6 @@ function A2PRegistration({ setCurrentStep }) {
                     ) : a2pRegSuccess === false ? (
                         <>
                             <Form.Group className="mb-4">
-                                <Form.Label>Business Email</Form.Label>
-                                <Form.Control type="email" {...register("businessEmail")} />
                                 <Alert className="my-3" variant="danger">{error}</Alert>
                                 <Button onClick={handleSubmit(handleRegistration)}>Start A2PRegistration</Button>
                             </Form.Group>
@@ -60,8 +66,6 @@ function A2PRegistration({ setCurrentStep }) {
                     ) : (
                         <>
                             <Form.Group className="mb-4">
-                                <Form.Label>Business Email</Form.Label>
-                                <Form.Control type="email" {...register("businessEmail")} />
                                 <p className='my-2'>Click the button below to start Start A2PRegistration.</p>
                                 <Button onClick={handleSubmit(handleRegistration)}>Start A2PRegistration</Button>
                             </Form.Group>
