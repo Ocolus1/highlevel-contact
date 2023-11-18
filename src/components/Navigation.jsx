@@ -61,7 +61,7 @@ function ResponsiveAppBar() {
         try {
 
             // Make a POST request
-            const response = axios.put(`${import.meta.env.VITE_REST_ENDPOINT}/auth/user/`, 
+            const response = await axios.put(`${import.meta.env.VITE_REST_ENDPOINT}/auth/user/`, 
             { email: user.email, status: selectedLabel }, 
                 {
                     headers: {
@@ -70,7 +70,9 @@ function ResponsiveAppBar() {
                 }
             )
 
-            console.log(response.data)
+            if (response.status ==  200) {
+                await getUser();
+            }
         } catch (error) {
             console.error('There was an error!', error);
         }
