@@ -11,7 +11,7 @@ import axios from "axios";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-export default function PaymentDetails({ authToken, getUser }) {
+export default function PaymentDetails({ authToken, getUser, setCurrentStep }) {
     const [clientSecret, setClientSecret] = useState("");
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function PaymentDetails({ authToken, getUser }) {
                 <Container className="mt-5">
                     {clientSecret && stripePromise && (
                         <Elements stripe={stripePromise} options={{ clientSecret: clientSecret }}>
-                            <PaymentForm getUser={getUser} authToken={authToken} />
+                            <PaymentForm getUser={getUser} authToken={authToken} setCurrentStep={setCurrentStep} />
                         </Elements>
                     )}
                 </Container>

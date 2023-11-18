@@ -7,7 +7,7 @@ import { Alert } from 'react-bootstrap';
 import axios from "axios";
 
 
-const PaymentForm = ({ authToken, getUser }) => {
+const PaymentForm = ({ authToken, getUser, setCurrentStep }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [loading, setLoading] = useState(false);
@@ -78,7 +78,11 @@ const PaymentForm = ({ authToken, getUser }) => {
             <CardContent>
                 <Box component="form" onSubmit={handleSubmit}>
                     {showFailureAlert && <Alert variant="danger" className="my-2">{error}</Alert>}
-                    {showSuccessAlert && <Alert variant="success" className="my-2">{success}</Alert>}
+                    {showSuccessAlert && (<>
+                        <Alert variant="success" className="my-2">{success}!</Alert>
+                        <p>If page dosen't redirect in 10 seconds click the button bellow</p>
+                        <Button className="ml-2 my-2" onClick={() => setCurrentStep(prev => prev + 1)}>Next</Button>
+                    </>)}
                     <PaymentElement />
                     <Button type="submit" disabled={!stripe && loading} variant="contained" className="mt-3" color="primary">
                          {loading ? "loading..." : "Submit Payment Details"}

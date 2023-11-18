@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import axios from "axios";
 
 
-function A2PRegistration({ authToken, getUser }) {
+function A2PRegistration({ authToken, getUser, setCurrentStep }) {
     const [loading, setLoading] = useState(false);
     const [a2pRegSuccess, setA2pRegSuccess] = useState(null);
     const [success, setSuccess] = useState("");
@@ -13,7 +13,6 @@ function A2PRegistration({ authToken, getUser }) {
 
     const handleRegistration = async () => {
         setLoading(true);
-        console.log(data)
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/a2p/A2PRegistration/`,
@@ -25,7 +24,7 @@ function A2PRegistration({ authToken, getUser }) {
                     }
                 }
             );
-            console.log(response)
+            
             if (response.data.message) {
                 setSuccess(response.data.message)
                 setA2pRegSuccess(true);
@@ -38,9 +37,7 @@ function A2PRegistration({ authToken, getUser }) {
             }
         } catch (error) {
             console.log(error)
-            if (error.response.status == 500) {
-                setError("A2PRegistration failed. please try again.")
-            }
+            setError(error.response.data.error)
             setA2pRegSuccess(false);
         }
         // Once processed:
@@ -55,7 +52,11 @@ function A2PRegistration({ authToken, getUser }) {
                     {loading ? (
                         <Alert variant="info">A2PRegistration in progress...</Alert>
                     ) : a2pRegSuccess === true ? (
-                            <Alert variant="success">{success}!</Alert>
+                            <>
+                                <Alert variant="success">{success}!</Alert>
+                                <p>If page dosen't redirect in 10 seconds click the button bellow</p>
+                                <Button className="ml-2 my-2" onClick={() => setCurrentStep(prev => prev + 1)}>Next</Button>
+                            </>
                     ) : a2pRegSuccess === false ? (
                         <>
                             <Form.Group className="mb-4">
@@ -66,7 +67,7 @@ function A2PRegistration({ authToken, getUser }) {
                     ) : (
                         <>
                             <Form.Group className="mb-4">
-                                <p className='my-2'>Click the button below to start Start A2PRegistration.</p>
+                                <p className='my-4'>Click the button below to start Start A2PRegistration.</p>
                                 <Button onClick={handleSubmit(handleRegistration)}>Start A2PRegistration</Button>
                             </Form.Group>
                         </>

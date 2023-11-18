@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import axios from "axios";
 
 
-function PhoneNumberPurchase({ authToken, getUser }) {
+function PhoneNumberPurchase({ authToken, getUser, setCurrentStep }) {
     const [loading, setLoading] = useState(false);
     const [purchaseSuccess, setPurchaseSuccess] = useState(null);
     const [success, setSuccess] = useState("");
@@ -49,7 +49,11 @@ function PhoneNumberPurchase({ authToken, getUser }) {
                     {loading ? (
                         <Alert variant="info">Purchasing phone number this may take a few minutes...</Alert>
                     ) : purchaseSuccess === true ? (
+                        <>
                             <Alert variant="success">{success}!</Alert>
+                            <p>If page dosen't redirect in 10 seconds click the button bellow</p>
+                            <Button className="ml-2 my-2" onClick={() => setCurrentStep(prev => prev + 1)}>Next</Button>
+                        </>
                     ) : purchaseSuccess === false ? (
                         <>
                             <Form.Group className="mb-4">

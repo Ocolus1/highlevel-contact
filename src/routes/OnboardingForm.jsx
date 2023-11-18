@@ -82,10 +82,10 @@ function MultiStepForm() {
 
     const steps = [
         { label: "User Info", component: <SubAccount authToken={authToken} getUser={getUser} /> },
-        { label: "Stripe Payment Details", component: <PaymentDetails authToken={authToken} getUser={getUser} /> },
-        { label: "Phone Number Purchase", component: <PhoneNumberPurchase authToken={authToken} getUser={getUser} /> },
-        { label: "A2P Registration", component: <A2PRegistration authToken={authToken} getUser={getUser} /> },
-        { label: "Contact Upload", component: <ContactUpload authToken={authToken} getUser={getUser} /> },
+        { label: "Stripe Payment Details", component: <PaymentDetails authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
+        { label: "Phone Number Purchase", component: <PhoneNumberPurchase authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
+        { label: "A2P Registration", component: <A2PRegistration authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
+        { label: "Contact Upload", component: <ContactUpload authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
         { label: "Schedule Calendar", component: <ScheduleCalendar authToken={authToken} getUser={getUser} /> },
         // ... other steps ...
     ];
@@ -96,7 +96,7 @@ function MultiStepForm() {
         <>
             <Navigation />
             <Container className="mt-5">
-                <h2>Onboarding Form</h2>
+                <h2 className='mb-3'>Onboarding Form</h2>
 
                 {/* Step Indicator */}
                 <ProgressBar now={progress} label={`${currentStep} / ${steps.length}`} />
