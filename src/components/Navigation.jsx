@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Select, FormControl, InputLabel } from '@mui/material';
 
 
 import { GoogleLogin } from '@react-oauth/google';
@@ -33,9 +35,48 @@ const CustomButton = styled(Button)({
     padding: ".3rem .5rem"
 });
 
+const menuItems = [
+    { label: "User Info"},
+    { label: "Stripe Payment Details" },
+    { label: "Phone Number Purchase"},
+    { label: "A2P Registration"},
+    { label: "Contact Upload"},
+    { label: "Schedule Calendar"},
+    // ... other steps ...
+];
+
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const { login, logout, isLoggedIn, user } = useAuth();
+    const { login, logout, isLoggedIn, user, authToken, getUser } = useAuth();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedItem, setSelectedItem] = React.useState("");
+
+    React.useEffect(() => {
+        setSelectedItem(user?.status); // Set default value based on user.status
+    }, [user?.status]);
+
+    const handleChange =  async (event) => {
+        const selectedLabel = event.target.value;
+        setSelectedItem(selectedLabel);
+        try {
+
+            // Make a POST request
+            const response = axios.put(`${import.meta.env.VITE_REST_ENDPOINT}/auth/user/`, 
+            { email: user.email, status: selectedLabel }, 
+                {
+                    headers: {
+                        Authorization: `Token ${authToken}`,
+                    },
+                }
+            )
+
+            console.log(response.data)
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
+           
+    };
+
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -44,6 +85,16 @@ function ResponsiveAppBar() {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const SelectedComponent = menuItems.find(item => item.label === selectedItem)?.component || null;
 
     const handleGoogleLogin = async (credentialResponse) => {
         try {
@@ -160,8 +211,47 @@ function ResponsiveAppBar() {
                     <Box sx={{  display: { xs: 'none', md: 'flex' } }} marginLeft="auto">
                         {isLoggedIn ? (
                             <div>
-                                <span>{user?.first_name} {user?.last_name} is logged in</span>
-                                <CustomButton onClick={handleLogout}>Logout</CustomButton>
+                                <IconButton
+                                    size="large"
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem onClick={handleClose}>
+                                        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} fullWidth>
+                                            <Select
+                                                id="demo-simple-select"
+                                                value={selectedItem}
+                                                label="Select Option"
+                                                onChange={handleChange}
+                                            >
+                                                {menuItems.map((item, index) => (
+                                                    <MenuItem key={index} value={item.label}>{item.label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                </Menu>
                             </div>
                         ) : (
                                 <GoogleLogin
@@ -175,7 +265,6 @@ function ResponsiveAppBar() {
                                     useOneTap
                                 />
                         )}
-                        
                     </Box>
                 </Toolbar>
             </Container>
