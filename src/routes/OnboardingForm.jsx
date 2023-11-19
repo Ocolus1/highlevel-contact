@@ -12,6 +12,7 @@ import PaymentDetails from '../components/PaymentDetails';
 import { Alert } from 'react-bootstrap';
 
 import axios from "axios";
+import CalendarDetails from '../components/CalendarDetails';
 
 
 function MultiStepForm() {
@@ -82,6 +83,7 @@ function MultiStepForm() {
 
     const steps = [
         { label: "User Info", component: <SubAccount authToken={authToken} getUser={getUser} /> },
+        { label: "Calendar Details", component: <CalendarDetails authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
         { label: "Stripe Payment Details", component: <PaymentDetails authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
         { label: "Phone Number Purchase", component: <PhoneNumberPurchase authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
         { label: "A2P Registration", component: <A2PRegistration authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
