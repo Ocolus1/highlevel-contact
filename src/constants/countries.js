@@ -121,3 +121,32 @@ export const countryCodes = [
     "VE", "VN", "VG", "VI", "WF", "EH", "YE", "ZM", "ZW"
 ];
 
+
+export const timeZones = [
+    { value: "GMT-12:00", label: "GMT-12:00 International Date Line West" },
+    { value: "GMT-11:00", label: "GMT-11:00 Pacific/Midway (SST)" },
+    { value: "GMT-10:00", label: "GMT-10:00 Pacific/Honolulu (HAST)" },
+    { value: "GMT-09:00", label: "GMT-09:00 America/Anchorage (AKST)" },
+    { value: "GMT-08:00", label: "GMT-08:00 America/Los_Angeles (PST)" },
+    { value: "GMT-07:00", label: "GMT-07:00 America/Denver (MST)" },
+    { value: "GMT-06:00", label: "GMT-06:00 America/Chicago (CST)" },
+    { value: "GMT-05:00", label: "GMT-05:00 America/New_York (EST)" },
+    { value: "GMT-04:00", label: "GMT-04:00 America/Santiago (AST)" },
+    { value: "GMT-03:00", label: "GMT-03:00 America/Buenos_Aires (ART)" },
+    { value: "GMT-02:00", label: "GMT-02:00 Atlantic/South_Georgia (GST)" },
+    { value: "GMT-01:00", label: "GMT-01:00 Atlantic/Azores (AZOT)" },
+    { value: "GMT+00:00", label: "GMT+00:00 Europe/London (GMT)" },
+    { value: "GMT+01:00", label: "GMT+01:00 Europe/Berlin (CET)" },
+    { value: "GMT+02:00", label: "GMT+02:00 Europe/Athens (EET)" },
+    { value: "GMT+03:00", label: "GMT+03:00 Asia/Riyadh (AST)" },
+    { value: "GMT+04:00", label: "GMT+04:00 Asia/Dubai (GST)" },
+    { value: "GMT+05:00", label: "GMT+05:00 Asia/Karachi (PKT)" },
+    { value: "GMT+06:00", label: "GMT+06:00 Asia/Dhaka (BST)" },
+    { value: "GMT+07:00", label: "GMT+07:00 Asia/Bangkok (ICT)" },
+    { value: "GMT+08:00", label: "GMT+08:00 Asia/Hong_Kong (HKT)" },
+    { value: "GMT+09:00", label: "GMT+09:00 Asia/Tokyo (JST)" },
+    { value: "GMT+10:00", label: "GMT+10:00 Pacific/Guam (ChST)" },
+    { value: "GMT+11:00", label: "GMT+11:00 Pacific/Noumea (NCT)" },
+    { value: "GMT+12:00", label: "GMT+12:00 Pacific/Auckland (NZST)" },
+    { value: "GMT+13:00", label: "GMT+13:00 Pacific/Apia (WST)" }
+];
