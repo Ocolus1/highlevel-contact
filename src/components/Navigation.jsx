@@ -37,6 +37,7 @@ const CustomButton = styled(Button)({
 
 const menuItems = [
     { label: "User Info"},
+    { label: "Calendar Details"},
     { label: "Stripe Payment Details" },
     { label: "Phone Number Purchase"},
     { label: "A2P Registration"},
@@ -243,6 +244,7 @@ function ResponsiveAppBar() {
                                             <Select
                                                 id="demo-simple-select"
                                                 value={selectedItem}
+                                                defaultValue={selectedItem}
                                                 label="Select Option"
                                                 onChange={handleChange}
                                             >
