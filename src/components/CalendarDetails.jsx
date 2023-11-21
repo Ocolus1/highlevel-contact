@@ -1,9 +1,15 @@
 import React from 'react'
 import { useForm, Controller } from 'react-hook-form';
-import { Container, Card, TextField, FormControl, FormLabel, FormControlLabel, RadioGroup, Radio, Checkbox, FormGroup, Select, MenuItem, InputLabel, Button } from '@mui/material';
+import { Container, Card, TextField, Alert, FormControl, FormLabel, FormControlLabel, RadioGroup, Radio, Checkbox, FormGroup, Select, MenuItem, InputLabel, Button } from '@mui/material';
 import { timeZones } from "../constants/countries.js"
+import axios from "axios";
+
+
 
 export default function CalendarDetails({ authToken, getUser, setCurrentStep }) {
+    const [showSuccessAlert, setShowSuccessAlert] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [showFailureAlert, setShowFailureAlert] = React.useState(false);
     const { register, handleSubmit, watch, control } = useForm({
         defaultValues: {
             inspectionDuration: '30 mins', 
@@ -11,8 +17,40 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
         }
     });
 
-    const onSubmit = data => {
-        console.log("Form submitted", data);
+
+    const onSubmit = async (data) => {
+        setLoading(true);
+        setShowFailureAlert(false);
+        setShowSuccessAlert(false);
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/calendar/`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Token ${authToken}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
+
+            if (response.data.message == "Calendar details created successfully") {
+
+                setShowSuccessAlert(true);
+
+                setTimeout(async () => {
+                    setShowSuccessAlert(false);
+                    await getUser();
+                }, 2000);
+
+            } else {
+                setShowFailureAlert(true);
+            }
+
+        } catch (error) {
+            console.error(error)
+        }
+        setLoading(false)
     };
 
     const notification = watch("notificationPreference");
@@ -179,8 +217,13 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
                             </>
                         )}
 
+                        <div className='my-3'>
+                            {showSuccessAlert && <Alert severity="success">Your data has been successfully submitted!</Alert>}
+                            {showFailureAlert && <Alert severity="error">Failed to submit. Please try again.</Alert>}
+                        </div>
+
                         <Button type="submit" variant="contained" color="primary">
-                            Submit
+                            {loading ? "loading..." : "Submit"}
                         </Button>
                     </form>
                 </Card>

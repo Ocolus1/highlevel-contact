@@ -4,15 +4,16 @@ import SubAccount from '../components/SubAccount';
 import PhoneNumberPurchase from '../components/PhoneNumberPurchase';
 import A2PRegistration from '../components/A2PRegistration';
 import ContactUpload from '../components/ContactUpload';
-import ScheduleCalendar from '../components/ScheduleCalendar';
 import Navigation from '../components/Navigation';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from "react-router-dom";
 import PaymentDetails from '../components/PaymentDetails';
+import Completed from '../components/Completed';
 import { Alert } from 'react-bootstrap';
 
 import axios from "axios";
 import CalendarDetails from '../components/CalendarDetails';
+import OfferInfo from '../components/OfferInfo';
 
 
 function MultiStepForm() {
@@ -88,7 +89,8 @@ function MultiStepForm() {
         { label: "Phone Number Purchase", component: <PhoneNumberPurchase authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
         { label: "A2P Registration", component: <A2PRegistration authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
         { label: "Contact Upload", component: <ContactUpload authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
-        { label: "Schedule Calendar", component: <ScheduleCalendar authToken={authToken} getUser={getUser} /> },
+        { label: "Offer Info", component: <OfferInfo authToken={authToken} getUser={getUser} setCurrentStep={setCurrentStep} /> },
+        { label: "Completed", component: <Completed  /> },
         // ... other steps ...
     ];
 

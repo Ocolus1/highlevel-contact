@@ -42,7 +42,8 @@ const menuItems = [
     { label: "Phone Number Purchase"},
     { label: "A2P Registration"},
     { label: "Contact Upload"},
-    { label: "Schedule Calendar"},
+    { label: "Offer Info"},
+    { label: "Completed"},
     // ... other steps ...
 ];
 
