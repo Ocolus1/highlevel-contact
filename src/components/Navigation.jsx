@@ -98,7 +98,7 @@ function ResponsiveAppBar() {
         setAnchorEl(null);
     };
 
-    const SelectedComponent = menuItems.find(item => item.label === selectedItem)?.component || null;
+    // const SelectedComponent = menuItems.find(item => item.label === selectedItem)?.component || null;
 
     const handleGoogleLogin = async (credentialResponse) => {
         try {
@@ -244,8 +244,8 @@ function ResponsiveAppBar() {
                                         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} fullWidth>
                                             <Select
                                                 id="demo-simple-select"
-                                                value={selectedItem}
-                                                defaultValue={selectedItem}
+                                                value={selectedItem || "User Info"}
+                                                defaultValue="User Info"
                                                 label="Select Option"
                                                 onChange={handleChange}
                                             >
