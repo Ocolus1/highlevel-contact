@@ -140,7 +140,7 @@ function ResponsiveAppBar() {
                             }
                         }}
                     >
-                        FUA-Automation
+                        The FollowUp Agency
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -210,7 +210,7 @@ function ResponsiveAppBar() {
                             }
                         }}
                     >
-                        FUA-Automation
+                        The FollowUp Agency
                     </Typography>
                     <Box sx={{  display: { xs: 'none', md: 'flex' } }} marginLeft="auto">
                         {isLoggedIn ? (
@@ -240,7 +240,7 @@ function ResponsiveAppBar() {
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem onClick={handleClose}>
+                                    {/* <MenuItem onClick={handleClose}>
                                         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} fullWidth>
                                             <Select
                                                 id="demo-simple-select"
@@ -254,7 +254,7 @@ function ResponsiveAppBar() {
                                                 ))}
                                             </Select>
                                         </FormControl>
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                                 </Menu>
                             </div>

@@ -32,6 +32,13 @@ function MultiStepForm() {
         // The cleanup function is optional in this case since navigate is stable
     }, [isLoggedIn, navigate]); 
 
+    useEffect(() => {
+        if (user?.status === "Completed") {
+            navigate("/dashboard");
+        }
+        // The cleanup function is optional in this case since navigate is stable
+    }, [isLoggedIn, navigate, user]); 
+
 
     useEffect(() => {
         if (user && user?.status) {

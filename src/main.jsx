@@ -13,6 +13,7 @@ import { AuthProvider } from './context/AuthContext';
 
 import Home from "./routes/Home"
 import OnboardingForm from "./routes/OnboardingForm"
+import Dashboard from "./routes/Profile"
 import ErrorPage from "./error-page";
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
   {
     path: "/onboarding",
     element: <OnboardingForm />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
     errorElement: <ErrorPage />,
   },
 ]);

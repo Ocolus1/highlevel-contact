@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { timezones, countries, countryCodes } from "../constants/countries.js"
 import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap';
+import axios from "axios";
 
 
 
@@ -9,13 +10,15 @@ function SubAccount({ authToken, getUser }) {
     const [showSuccessAlert, setShowSuccessAlert] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [showFailureAlert, setShowFailureAlert] = React.useState(false);
+    const [showAccountExist, setShowAccountExist] = React.useState(false);
     const [showSupport, setShowSupportAlert] = React.useState(false);
     const [failureCount, setFailureCount] = React.useState(0);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         setLoading(true)
+        setShowAccountExist(false)
         // Preprocess the website field to match the specified format
         data.website = data.website.replace(/^(https?:\/\/)?(www\.)?/i, '').split('/')[0];
 
@@ -46,40 +49,49 @@ function SubAccount({ authToken, getUser }) {
             "contact_phone": data["contactPhone"],
         };
 
-        // Make the POST request to the backend
-        fetch(`${import.meta.env.VITE_REST_ENDPOINT}/api/subaccounts/create_subaccount/`, {
-            method: "POST",
-            headers: {
-                Authorization: `Token ${authToken}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message == "Subaccount created successfully") {
-                    setShowSuccessAlert(true);
-                    setTimeout(async () => {
-                        setShowSuccessAlert(false);
-                        await getUser();
-                    }, 2000);
-                } else {
-                    setFailureCount(prev => prev + 1);
-                    if (failureCount < 3) {
-                        setShowFailureAlert(true);
-                        setTimeout(() => {
-                            setShowFailureAlert(false);
-                        }, 2000);
-                    } else {
-                        setShowSupportAlert(true)
-                        setTimeout(() => {
-                            setShowSupportAlert(false);
-                        }, 2000);
-                        // Show contact support message
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_REST_ENDPOINT}/api/subaccounts/create_subaccount/`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Token ${authToken}`,
+                        "Content-Type": "application/json",
                     }
                 }
-                setLoading(false)
-            });
+            );
+
+            if (response.data.message == "Subaccount created successfully") {
+                setShowSuccessAlert(true);
+                setTimeout(async () => {
+                    setShowSuccessAlert(false);
+                    await getUser();
+                }, 2000);
+            } else {
+                setFailureCount(prev => prev + 1);
+                if (failureCount < 3) {
+                    setShowFailureAlert(true);
+                    setTimeout(() => {
+                        setShowFailureAlert(false);
+                    }, 2000);
+                } else {
+                    setShowSupportAlert(true)
+                    setTimeout(() => {
+                        setShowSupportAlert(false);
+                    }, 2000);
+                    // Show contact support message
+                }
+            }
+            setLoading(false)
+
+        } catch (error) {
+            console.error("Error occurred during API call:", error);
+            setShowAccountExist(true);
+            setTimeout(() => {
+                setShowAccountExist(false);
+            }, 3000);
+        }
+        setLoading(false)
     };
 
 
@@ -219,13 +231,14 @@ function SubAccount({ authToken, getUser }) {
                             <div>
                                 {showSuccessAlert && <Alert variant="success">Your data has been successfully submitted!</Alert>}
                                 {showFailureAlert && <Alert variant="danger">Failed to submit. Please try again.</Alert>}
+                                {showAccountExist && <Alert variant="danger">Subaccount already exists.</Alert>}
                                 {showSupport && <Alert variant="danger">Contact Support, to fix your problem. </Alert>}
                             </div>
                             <Form.Group className="mb-4">
                                 <Form.Check
                                     type="checkbox"
                                     required
-                                    label={<span>I accept the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a></span>}
+                                    label={<span>I accept the <a href="https://www.thefollowupagency.com/privacy-policy" target="_blank" rel="noopener noreferrer">Terms and Conditions</a></span>}
                                 />
                             </Form.Group>
                             <Button type="submit" disabled={loading} variant="primary">{loading ? "loading..." : "Next"}</Button>

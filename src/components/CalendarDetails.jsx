@@ -10,12 +10,7 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
     const [showSuccessAlert, setShowSuccessAlert] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [showFailureAlert, setShowFailureAlert] = React.useState(false);
-    const { register, handleSubmit, watch, control } = useForm({
-        defaultValues: {
-            inspectionDuration: '30 mins', 
-            timeBuffer: "None"
-        }
-    });
+    const { register, handleSubmit, watch, control } = useForm();
 
 
     const onSubmit = async (data) => {
@@ -68,7 +63,7 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
                         <FormGroup className='mb-3'>
                             <FormControl component="fieldset">
                                 <FormLabel id="bookingMethod">Which way you would prefer us to book appointments ?</FormLabel>
-                                <RadioGroup aria-labelledby="bookingMethod" >
+                                <RadioGroup aria-labelledby="bookingMethod" defaultValue="googleCalendar"  >
                                     <FormControlLabel value="googleCalendar" {...register("bookingMethod")} control={<Radio />} label="Google Calendar" />
                                     <FormControlLabel value="sendDirectly" {...register("bookingMethod")} control={<Radio />} label="Send appointment directly" />
                                 </RadioGroup>
@@ -123,6 +118,7 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
                                     name="inspectionDuration"
                                     control={control}
                                     rules={{ required: true }}
+                                    defaultValue="30 mins" 
                                     render={({ field }) => (
                                         <RadioGroup row {...field}>
                                             {["30 mins", "45 mins", "1 hour", "1.5 hours", "2 hours"].map(duration => (
@@ -158,9 +154,9 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
                         <FormGroup className='mb-3'>
                             <FormControl component="fieldset">
                                 <FormLabel id="appointment">Do you want us to send appointment reminder sequences to inspections we book ?</FormLabel>
-                                <RadioGroup aria-labelledby="appointment" {...register("appointmentReminder")}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Yes, If we are sending the appointments directly to you." />
-                                    <FormControlLabel value="no" control={<Radio />} label="No, if you have your own sequences/process." />
+                                <RadioGroup aria-labelledby="appointment" defaultValue="yes" >
+                                    <FormControlLabel value="yes" control={<Radio />} {...register("appointmentReminder")} label="Yes, If we are sending the appointments directly to you." />
+                                    <FormControlLabel value="no" control={<Radio />} {...register("appointmentReminder")} label="No, if you have your own sequences/process." />
                                 </RadioGroup>
                             </FormControl>
                         </FormGroup>
@@ -169,10 +165,10 @@ export default function CalendarDetails({ authToken, getUser, setCurrentStep }) 
                         <FormGroup className='mb-3'>
                             <FormControl component="fieldset">
                                 <FormLabel id="notification">How would you like notifications from us when we schedule inspections from the campaign ?</FormLabel>
-                                <RadioGroup row aria-labelledby="notification" {...register("notificationPreference")}>
-                                    <FormControlLabel value="text" control={<Radio />} label="Text" />
-                                    <FormControlLabel value="email" control={<Radio />} label="Email" />
-                                    <FormControlLabel value="both" control={<Radio />} label="Both" />
+                                <RadioGroup row aria-labelledby="notification" defaultValue="text" >
+                                    <FormControlLabel value="text" {...register("notificationPreference")} control={<Radio />} label="Text" />
+                                    <FormControlLabel value="email" {...register("notificationPreference")} control={<Radio />} label="Email" />
+                                    <FormControlLabel value="both" {...register("notificationPreference")} control={<Radio />} label="Both" />
                                 </RadioGroup>
                             </FormControl>
                         </FormGroup>
