@@ -1,11 +1,12 @@
 import React from 'react';
 import { Container, Typography, Button, Box } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 function OnboardingComplete() {
+    const navigate = useNavigate();
     // Function to handle any action after completion, e.g., navigating to a dashboard
     const handleNextSteps = () => {
-        // Implement your next step logic here
-        console.log("Moving to the next steps...");
+        navigate("/dashboard");
     };
 
     return (
