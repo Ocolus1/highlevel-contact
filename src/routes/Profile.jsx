@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Dashboard } from './../../../hl-admin/src/Dashboard/index';
 import Navigation from '../components/Navigation';
 import { Container } from 'react-bootstrap';
 
